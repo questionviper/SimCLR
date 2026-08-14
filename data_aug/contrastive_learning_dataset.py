@@ -35,7 +35,7 @@ class ContrastiveLearningDataset:
                                                               n_views),
                                                           download=True),
                           'stanford_dogs': lambda: datasets.ImageFolder(
-                              self.root_folder+'/stanford_dogs/Images',
+                              self.root_folder+'Images',
                               transform=ContrastiveLearningViewGenerator(
                                   self.get_simclr_pipeline_transform(224), n_views)
                           )}
