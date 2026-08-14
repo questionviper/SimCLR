@@ -18,7 +18,8 @@ class ContrastiveLearningDataset:
                                               transforms.RandomApply([color_jitter], p=0.8),
                                               transforms.RandomGrayscale(p=0.2),
                                               GaussianBlur(kernel_size=int(0.1 * size)),
-                                              transforms.ToTensor()])
+                                              transforms.ToTensor(),
+                                              transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
         return data_transforms
 
     def get_dataset(self, name, n_views):
@@ -32,7 +33,12 @@ class ContrastiveLearningDataset:
                                                           transform=ContrastiveLearningViewGenerator(
                                                               self.get_simclr_pipeline_transform(96),
                                                               n_views),
-                                                          download=True)}
+                                                          download=True),
+                          'stanford_dogs': lambda: datasets.ImageFolder(
+                              self.root_folder+'/stanford_dogs/Images',
+                              transform=ContrastiveLearningViewGenerator(
+                                  self.get_simclr_pipeline_transform(224), n_views)
+                          )}
 
         try:
             dataset_fn = valid_datasets[name]
